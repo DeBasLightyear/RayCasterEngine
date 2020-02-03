@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayCasterEngine", "RayCasterEngine\RayCasterEngine.csproj", "{FCCC2A1B-B5B1-46F3-8171-3388EFD576B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayCasterEngine.Specs", "RayCasterEngine.Specs\RayCasterEngine.Specs.csproj", "{EB2BB187-74E9-4A45-AD03-D38E1EE57073}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCCC2A1B-B5B1-46F3-8171-3388EFD576B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCCC2A1B-B5B1-46F3-8171-3388EFD576B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCCC2A1B-B5B1-46F3-8171-3388EFD576B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCCC2A1B-B5B1-46F3-8171-3388EFD576B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB2BB187-74E9-4A45-AD03-D38E1EE57073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB2BB187-74E9-4A45-AD03-D38E1EE57073}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB2BB187-74E9-4A45-AD03-D38E1EE57073}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB2BB187-74E9-4A45-AD03-D38E1EE57073}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA5885C5-1519-4ED0-BDE8-962DFD906860}
+	EndGlobalSection
+EndGlobal
