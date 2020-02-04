@@ -103,7 +103,7 @@ let ``Dividing a tuple by a scalar`` () =
 [<Fact>]
 let ``Computing the magnutide of vector(1, 0, 0)`` () =
     let v = Tuple3d.Vector (1.0, 0.0, 0.0)
-    let magnitudeV = Tuple3d.GetMagnitude (v)
+    let magnitudeV = Tuple3d.Magnitude (v)
 
     magnitudeV = 1.0
     |> Assert.True
@@ -111,7 +111,7 @@ let ``Computing the magnutide of vector(1, 0, 0)`` () =
 [<Fact>]
 let ``Computing the magnitude of vector(0, 1, 0)`` () =
     let v = Tuple3d.Vector (0.0, 1.0, 0.0)
-    let magnitudeV = Tuple3d.GetMagnitude (v)
+    let magnitudeV = Tuple3d.Magnitude (v)
 
     magnitudeV = 1.0
     |> Assert.True
@@ -119,7 +119,7 @@ let ``Computing the magnitude of vector(0, 1, 0)`` () =
 [<Fact>]
 let ``Computing the magnitude of vector(0, 0, 1)`` () =
     let v = Tuple3d.Vector (0.0, 0.0, 1.0)
-    let magnitudeV = Tuple3d.GetMagnitude (v)
+    let magnitudeV = Tuple3d.Magnitude (v)
 
     magnitudeV = 1.0
     |> Assert.True
@@ -127,7 +127,7 @@ let ``Computing the magnitude of vector(0, 0, 1)`` () =
 [<Fact>]
 let ``Computing the magnitude of vector(1, 2, 3)`` () =
     let v = Tuple3d.Vector (1.0, 2.0, 3.0)
-    let magnitudeV = Tuple3d.GetMagnitude (v)
+    let magnitudeV = Tuple3d.Magnitude (v)
 
     magnitudeV = sqrt 14.0
     |> Assert.True
@@ -135,7 +135,7 @@ let ``Computing the magnitude of vector(1, 2, 3)`` () =
 [<Fact>]
 let ``Computing the magnitude of vector(-1, -2, -3)`` () =
     let v = Tuple3d.Vector (-1.0, -2.0, -3.0)
-    let magnitudeV = Tuple3d.GetMagnitude (v)
+    let magnitudeV = Tuple3d.Magnitude (v)
 
     magnitudeV = sqrt 14.0
     |> Assert.True
@@ -143,7 +143,7 @@ let ``Computing the magnitude of vector(-1, -2, -3)`` () =
 [<Fact>]
 let ``Normalizing vector(4, 0, 0) gives (1, 0, 0)`` () =
     let v = Tuple3d.Vector (4.0, 0.0, 0.0)
-    let normalV = Tuple3d.GetNormalizedTuple(v)
+    let normalV = Tuple3d.Normalize(v)
 
     normalV = Tuple3d.Vector (1.0, 0.0, 0.0)
     |> Assert.True
@@ -151,7 +151,7 @@ let ``Normalizing vector(4, 0, 0) gives (1, 0, 0)`` () =
 [<Fact>]
 let ``Normalizing vector(1, 2, 3)`` () =
     let v = Tuple3d.Vector (1.0, 2.0, 3.0)
-    let normalV = Tuple3d.GetNormalizedTuple(v)
+    let normalV = Tuple3d.Normalize(v)
 
     normalV = Tuple3d.Vector (0.26726, 0.53452, 0.80178)
     |> Assert.True
@@ -159,16 +159,16 @@ let ``Normalizing vector(1, 2, 3)`` () =
 [<Fact>]
 let ``The magnitude of a normalized vector`` () =
     let v = Tuple3d.Vector (1.0, 2.0, 3.0)
-    let normalV = Tuple3d.GetNormalizedTuple(v)
+    let normalV = Tuple3d.Normalize(v)
 
-    Tuple3d.GetMagnitude (normalV) = 1.0
+    Tuple3d.Magnitude (normalV) = 1.0
     |> Assert.True
 
 [<Fact>]
 let ``The dot product of two tuples`` () =
     let a = Tuple3d.Vector (1.0, 2.0, 3.0)
     let b = Tuple3d.Vector (2.0, 3.0, 4.0)
-    let dotProduct = Tuple3d.GetDotProduct(a, b)
+    let dotProduct = Tuple3d.DotProduct(a, b)
 
     dotProduct = 20.0
     |> Assert.True
@@ -177,8 +177,8 @@ let ``The dot product of two tuples`` () =
 let ``The cross product of two vectors`` () =
     let a = Tuple3d.Vector (1.0, 2.0, 3.0)
     let b = Tuple3d.Vector (2.0, 3.0, 4.0)
-    let crossProductAB = Tuple3d.GetCrossProduct(a, b)
-    let crossProductBA = Tuple3d.GetCrossProduct(b, a)
+    let crossProductAB = Tuple3d.CrossProduct(a, b)
+    let crossProductBA = Tuple3d.CrossProduct(b, a)
 
     crossProductAB = Tuple3d.Vector (-1.0, 2.0, -1.0)
     |> (&&) (crossProductBA = Tuple3d.Vector (1.0, -2.0, 1.0))

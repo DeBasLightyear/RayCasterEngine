@@ -2,11 +2,11 @@
 {
     class Projectile
     {
-        public Point3d Position { get; }
+        public Tuple3d Position { get; }
 
-        public Vector3d Velocity { get; }
+        public Tuple3d Velocity { get; }
 
-        public Projectile(Point3d position, Vector3d velocity)
+        public Projectile(Tuple3d position, Tuple3d velocity)
         {
             Position = position;
             Velocity = velocity;
@@ -14,8 +14,8 @@
 
         public static Projectile Tick(Environment env, Projectile proj)
         {
-            var position = (Point3d)(proj.Position + proj.Velocity);
-            var velocity = (Vector3d)(proj.Velocity + env.Gravity + env.Wind);
+            var position = proj.Position + proj.Velocity;
+            var velocity = proj.Velocity + env.Gravity + env.Wind;
             return new Projectile(position, velocity);
         }
 
