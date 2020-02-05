@@ -14,12 +14,10 @@ namespace RayCasterEngine
             var envWind = Tuple3d.Vector(-0.01, 0, 0);
             var env = new RayCasterEngine.Environment(envGravity, envWind);
 
-            var continueLoop = true;
-            while (continueLoop)
+            while (projectile.Position.Y >= 0)
             {
                 projectile = Projectile.Tick(env, projectile);
                 System.Console.WriteLine(projectile.GetPosition());
-                continueLoop = !(HelperMath.NearlyEqual(projectile.Position.Y, 0.0) || projectile.Position.Y < 0.0);
             }
         }
     }
