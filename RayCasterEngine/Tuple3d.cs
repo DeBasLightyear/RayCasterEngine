@@ -4,21 +4,35 @@ namespace RayCasterEngine
 {
     public class Tuple3d
     {
-        // public (double x, double y, double z, double w) coord { get; internal set; }
-        public double X { get; internal set; }
-        public double Y { get; internal set; }
-        public double Z { get; internal set; }
-        public double W { get; internal set; }
+        public Tuple tuple { get; }
+        public double X
+        { 
+            get { return tuple.Content[0]; }
+        }
+        public double Y
+        {
+            get { return tuple.Content[1]; }
+        }
+        public double Z
+        {
+            get { return tuple.Content[2]; }
+        }
+        public double W
+        {
+            get { return tuple.Content[3]; }
+        }
 
         public Tuple3d(double x, double y, double z, double w)
         {
-            X = x;
-            Y = y;
-            Z = z;
-            W = w;
+            tuple = new Tuple(new double[] { x, y, z, w });
         }
 
-        // Static methods
+        public Tuple3d(Tuple t)
+        {
+            tuple = t;
+        }
+
+        // Public methods
         public static Tuple3d Point(double x, double y, double z)
         {
             return new Tuple3d(x, y, z, 1.0);
@@ -29,11 +43,6 @@ namespace RayCasterEngine
             return new Tuple3d(x, y, z, 0.0);
         }
 
-        public static double DotProduct(Tuple3d a, Tuple3d b)
-        {
-            return a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W;
-        }
-
         public static Tuple3d CrossProduct(Tuple3d a, Tuple3d b)
         {
             return Vector(a.Y * b.Z - a.Z * b.Y,
@@ -41,124 +50,82 @@ namespace RayCasterEngine
                           a.X * b.Y - a.Y * b.X);
         }
 
-        public static double Magnitude(Tuple3d tup)
+        public static double DotProduct(Tuple3d a, Tuple3d b)
         {
-            var magX = Math.Pow(tup.X, 2);
-            var magY = Math.Pow(tup.Y, 2);
-            var magZ = Math.Pow(tup.Z, 2);
-
-            return Math.Sqrt(magX + magY + magZ);
+            return Tuple.DotProduct(a.tuple, b.tuple);
         }
 
-        public static Tuple3d Normalize(Tuple3d tup)
+        public static double Magnitude(Tuple3d t)
         {
-            var magnitude = Magnitude(tup);
-            var newX = tup.X / magnitude;
-            var newY = tup.Y / magnitude;
-            var newZ = tup.Z / magnitude;
-
-            return new Tuple3d(x: newX, y: newY, z: newZ, w: tup.W);
+            return Tuple.Magnitude(t.tuple);
         }
 
-        // Overloading computation and comparison to make life easier
-        public static bool operator ==(Tuple3d a, Tuple3d b) // return true if Tuple3d is equal to other Tuple3d
+        public static Tuple3d Normalize(Tuple3d t)
         {
-            return (HelperMath.NearlyEqual(a.X, b.X) && HelperMath.NearlyEqual(a.Y, b.Y) && HelperMath.NearlyEqual(a.Z, b.Z) && a.W == b.W);
+            return new Tuple3d(Tuple.Normalize(t.tuple));
+        }
+
+        // Overloading operators (again)
+        public static bool operator ==(Tuple3d a, Tuple3d b)
+        {
+            return a.tuple == b.tuple;
         }
 
         public static bool operator !=(Tuple3d a, Tuple3d b)
         {
-            return (!HelperMath.NearlyEqual(a.X, b.X) || !HelperMath.NearlyEqual(a.Y, b.Y) || !HelperMath.NearlyEqual(a.Z, b.Z) || a.W != b.W);
+            return a.tuple != b.tuple;
         }
 
         public static Tuple3d operator +(Tuple3d a, Tuple3d b)
         {
-            var newX = a.X + b.X;
-            var newY = a.Y + b.Y;
-            var newZ = a.Z + b.Z;
-            var newW = a.W + b.W;
-
-            return new Tuple3d(newX, newY, newZ, newW);
+            return new Tuple3d(a.tuple + b.tuple);
         }
 
         public static Tuple3d operator -(Tuple3d a, Tuple3d b)
         {
-            var newX = a.X - b.X;
-            var newY = a.Y - b.Y;
-            var newZ = a.Z - b.Z;
-            var newW = a.W - b.W;
-
-            return new Tuple3d(newX, newY, newZ, newW);
+            return new Tuple3d(a.tuple - b.tuple);
         }
 
-        public static Tuple3d operator -(Tuple3d tup)
+        public static Tuple3d operator -(Tuple3d t)
         {
-            var newX = -tup.X;
-            var newY = -tup.Y;
-            var newZ = -tup.Z;
-            var newW = -tup.W;
-
-            return new Tuple3d(newX, newY, newZ, newW);
+            return new Tuple3d(-t.tuple);
         }
 
         public static Tuple3d operator *(Tuple3d a, Tuple3d b)
         {
-            var newX = a.X * b.X;
-            var newY = a.Y * b.Y;
-            var newZ = a.Z * b.Z;
-            var newW = a.W * b.W;
-
-            return new Tuple3d(newX, newY, newZ, newW);
+            return new Tuple3d(a.tuple * b.tuple);
         }
 
-        public static Tuple3d operator *(Tuple3d a, double b)
+        public static Tuple3d operator *(Tuple3d t, double d)
         {
-            var newX = a.X * b;
-            var newY = a.Y * b;
-            var newZ = a.Z * b;
-            var newW = a.W * b;
-
-            return new Tuple3d(newX, newY, newZ, newW);
+            return new Tuple3d(t.tuple * d);
         }
 
         public static Tuple3d operator /(Tuple3d a, Tuple3d b)
         {
-            var newX = a.X / b.X;
-            var newY = a.Y / b.Y;
-            var newZ = a.Z / b.Z;
-            var newW = a.W / b.W;
-
-            return new Tuple3d(newX, newY, newZ, newW);
+            return new Tuple3d(a.tuple / b.tuple);
         }
 
-        public static Tuple3d operator /(Tuple3d a, double b)
+        public static Tuple3d operator /(Tuple3d t, double d)
         {
-            var newX = a.X / b;
-            var newY = a.Y / b;
-            var newZ = a.Z / b;
-            var newW = a.W / b;
-
-            return new Tuple3d(newX, newY, newZ, newW);
+            return new Tuple3d(t.tuple / d);
         }
 
         // Overriding basic methods
         public override string ToString()
         {
-            return $"x: {X}, y: {Y}, z: {Z}, w: {W}";
+            return tuple.ToString();
         }
 
-        public override bool Equals(object obj) // override to make the compiler happy
+        public override bool Equals(object obj)
         {
-            if (obj is null)
-                return false;
-
-            var tup = obj as Tuple3d;
-            return (HelperMath.NearlyEqual(this.X, tup.X) && HelperMath.NearlyEqual(this.Y, tup.Y) && HelperMath.NearlyEqual(this.Z, tup.Z) && this.W == tup.W);
+            var toTest = obj as Tuple3d;
+            return Tuple.TuplesAreEqual(toTest.tuple, this.tuple);
         }
 
-        public override int GetHashCode() // override to make the compiler happy
+        public override int GetHashCode()
         {
-            return (int)(X + Y + Z + W);
+            return tuple.GetHashCode();
         }
     }
 }

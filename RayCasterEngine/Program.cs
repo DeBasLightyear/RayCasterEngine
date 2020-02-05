@@ -5,7 +5,7 @@ namespace RayCasterEngine
     class Program
     {
         static void Main(string[] args)
-        {
+        {   
             var projectilePosition = Tuple3d.Point(0, 1, 0);
             var projectileVelocity = Tuple3d.Normalize(Tuple3d.Vector(1, 1, 0));
             var projectile = new Projectile(projectilePosition, projectileVelocity);

@@ -5,25 +5,29 @@ namespace RayCasterEngine
 {
     public class Tuple
     {
-        private double[] Content { get; set; }
+        public double[] Content { get; set; }
 
         public Tuple(double[] fieldValues)
         {
             Content = new double[fieldValues.Length];
-            fieldValues.Select((v, i) => Content[i] = v);
+            Content = fieldValues;
         }
 
-        // Helper methods
+        // Private helper methods
+        private static void CheckTupleSizeMatch(Tuple a, Tuple b)
+        {
+            if (a.Content.Length != b.Content.Length)
+                throw new System.ArgumentException("Tuples must be of same length.");
+        }
         private static bool NearlyEqual(double a, double b)
         {
             var Epsilon = 0.00001;
             return Math.Abs(a - b) < Epsilon;
         }
 
-        private static bool TuplesAreEqual(Tuple a, Tuple b)
+        public static bool TuplesAreEqual(Tuple a, Tuple b)
         {
-            if (a.Content.Length != b.Content.Length) // two different types of tuples can never be equal
-                return false;
+            CheckTupleSizeMatch(a, b);
             
             for (var i = 0; i < a.Content.Length; i++)
             {   
@@ -35,8 +39,7 @@ namespace RayCasterEngine
         
         private static Tuple OperateOnArray(Func<double, double, double> f, Tuple a, Tuple b)
         {
-            if (a.Content.Length != b.Content.Length)
-                throw new System.ArgumentException("Tuples must be of same length");
+            CheckTupleSizeMatch(a, b);
             
             var tupleContent = new double[a.Content.Length];
             for (var i = 0; i < a.Content.Length; i++)
@@ -54,7 +57,43 @@ namespace RayCasterEngine
             return new Tuple(tupleContent);
         }
 
-        // Static methods
+        // Public methods
+        public static double DotProduct(Tuple a, Tuple b)
+        {
+            // First check if same size tuples
+            CheckTupleSizeMatch(a, b);
+            
+            // Calculate dot product and return
+            var result = 0.0;
+            for (var i = 0; i < a.Content.Length; i++)
+                result += a.Content[i] * b.Content[i];
+
+            return result;
+        }
+
+        public static double Magnitude(Tuple t)
+        {
+            // Calculate sum of each element to the power of 2
+            var sumPow = 0.0;
+            for (var i = 0; i < t.Content.Length; i++)
+                sumPow += Math.Pow(t.Content[i], 2);
+            
+            // Return the magnitude
+            return Math.Sqrt(sumPow);
+        }
+
+        public static Tuple Normalize(Tuple t)
+        {
+            var magnitude = Magnitude(t);
+            
+            var tupleContent = new double[t.Content.Length];
+            for (var i = 0; i < t.Content.Length; i++)
+                tupleContent[i] = t.Content[i] / magnitude;
+            
+            return new Tuple(tupleContent);
+        }
+        
+        // Overloading operators
         public static bool operator ==(Tuple a, Tuple b)
         {
             return TuplesAreEqual(a, b);
@@ -110,7 +149,7 @@ namespace RayCasterEngine
         // Overriding basic methods
         public override string ToString()
         {
-            return Content.ToString();
+            return String.Join(", ", Content);
         }
 
         public override bool Equals(object obj)

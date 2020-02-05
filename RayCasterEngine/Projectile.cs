@@ -1,4 +1,6 @@
-﻿namespace RayCasterEngine
+﻿using System;
+
+namespace RayCasterEngine
 {
     class Projectile
     {
