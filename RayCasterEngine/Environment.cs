@@ -2,11 +2,11 @@
 {
     class Environment
     {
-        public Tuple3d Gravity { get; }
+        public Tuple<Vector> Gravity { get; }
 
-        public Tuple3d Wind { get; }
+        public Tuple<Vector> Wind { get; }
 
-        public Environment(Tuple3d gravity, Tuple3d wind)
+        public Environment(Tuple<Vector> gravity, Tuple<Vector> wind)
         {
             Gravity = gravity;
             Wind = wind;
