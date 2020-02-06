@@ -4,11 +4,11 @@ namespace RayCasterEngine
 {
     class Projectile
     {
-        public Tuple<Point> Position { get; }
+        public Tuple<Tuple3d> Position { get; }
 
-        public Tuple<Vector> Velocity { get; }
+        public Tuple<Tuple3d> Velocity { get; }
 
-        public Projectile(Tuple<Point> position, Tuple<Vector> velocity)
+        public Projectile(Tuple<Tuple3d> position, Tuple<Tuple3d> velocity)
         {
             Position = position;
             Velocity = velocity;
