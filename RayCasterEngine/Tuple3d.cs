@@ -1,131 +1,49 @@
-﻿using System;
-
 namespace RayCasterEngine
 {
-    public class Tuple3d
+    public class Tuple3d : TupleData
     {
-        public Tuple tuple { get; }
-        public double X
-        { 
-            get { return tuple.Content[0]; }
-        }
-        public double Y
-        {
-            get { return tuple.Content[1]; }
-        }
-        public double Z
-        {
-            get { return tuple.Content[2]; }
-        }
-        public double W
-        {
-            get { return tuple.Content[3]; }
-        }
+        public double X { get { return Tuple[0]; } }
+        public double Y { get { return Tuple[1]; } }
+        public double Z { get { return Tuple[2]; } }
+        public double W { get { return Tuple[3]; } }
 
         public Tuple3d(double x, double y, double z, double w)
         {
-            tuple = new Tuple(new double[] { x, y, z, w });
+            Tuple = new double[] { x, y, z, w };
         }
 
-        public Tuple3d(Tuple t)
+        public Tuple3d(double[] tuple)
         {
-            tuple = t;
+            if (tuple.Length != 4)
+                throw new System.ArgumentException("A point or a vector must have an x, y, z and w value");
+            Tuple = tuple;
         }
 
-        // Public methods
-        public static Tuple3d Point(double x, double y, double z)
+        public Tuple3d()
         {
-            return new Tuple3d(x, y, z, 1.0);
+            Tuple = new double[4];
         }
 
-        public static Tuple3d Vector(double x, double y, double z)
+        public static Tuple<Tuple3d> Point(double x, double y, double z)
         {
-            return new Tuple3d(x, y, z, 0.0);
+            var point = new Tuple3d(x, y, z, 1.0);
+            return new Tuple<Tuple3d>(point);
         }
 
-        public static Tuple3d CrossProduct(Tuple3d a, Tuple3d b)
+        public static Tuple<Tuple3d> Vector(double x, double y, double z)
         {
-            return Vector(a.Y * b.Z - a.Z * b.Y,
-                          a.Z * b.X - a.X * b.Z,
-                          a.X * b.Y - a.Y * b.X);
+            var vector = new Tuple3d(x, y, z, 0.0);
+            return new Tuple<Tuple3d>(vector);
         }
 
-        public static double DotProduct(Tuple3d a, Tuple3d b)
+        public static Tuple<Tuple3d> CrossProduct(Tuple3d a, Tuple3d b) // a method specific to vectors
         {
-            return Tuple.DotProduct(a.tuple, b.tuple);
-        }
-
-        public static double Magnitude(Tuple3d t)
-        {
-            return Tuple.Magnitude(t.tuple);
-        }
-
-        public static Tuple3d Normalize(Tuple3d t)
-        {
-            return new Tuple3d(Tuple.Normalize(t.tuple));
-        }
-
-        // Overloading operators (again)
-        public static bool operator ==(Tuple3d a, Tuple3d b)
-        {
-            return a.tuple == b.tuple;
-        }
-
-        public static bool operator !=(Tuple3d a, Tuple3d b)
-        {
-            return a.tuple != b.tuple;
-        }
-
-        public static Tuple3d operator +(Tuple3d a, Tuple3d b)
-        {
-            return new Tuple3d(a.tuple + b.tuple);
-        }
-
-        public static Tuple3d operator -(Tuple3d a, Tuple3d b)
-        {
-            return new Tuple3d(a.tuple - b.tuple);
-        }
-
-        public static Tuple3d operator -(Tuple3d t)
-        {
-            return new Tuple3d(-t.tuple);
-        }
-
-        public static Tuple3d operator *(Tuple3d a, Tuple3d b)
-        {
-            return new Tuple3d(a.tuple * b.tuple);
-        }
-
-        public static Tuple3d operator *(Tuple3d t, double d)
-        {
-            return new Tuple3d(t.tuple * d);
-        }
-
-        public static Tuple3d operator /(Tuple3d a, Tuple3d b)
-        {
-            return new Tuple3d(a.tuple / b.tuple);
-        }
-
-        public static Tuple3d operator /(Tuple3d t, double d)
-        {
-            return new Tuple3d(t.tuple / d);
-        }
-
-        // Overriding basic methods
-        public override string ToString()
-        {
-            return tuple.ToString();
-        }
-
-        public override bool Equals(object obj)
-        {
-            var toTest = obj as Tuple3d;
-            return Tuple.TuplesAreEqual(toTest.tuple, this.tuple);
-        }
-
-        public override int GetHashCode()
-        {
-            return tuple.GetHashCode();
+            var tupleData = Tuple3d.Vector (
+                                a.Y * b.Z - a.Z * b.Y, // x
+                                a.Z * b.X - a.X * b.Z, // y
+                                a.X * b.Y - a.Y * b.X  // z
+                            );
+            return tupleData;
         }
     }
 }

@@ -1,155 +1,193 @@
 using System;
-using System.Linq;
 
 namespace RayCasterEngine
 {
-    public class Tuple
+    public class Tuple<T> where T : TupleData, new() // T must be a tuple type and must have a constructor without parameters
     {
-        public double[] Content { get; set; }
+        public T Data { get; }
 
-        public Tuple(double[] fieldValues)
+        public Tuple(T tupleData)
         {
-            Content = new double[fieldValues.Length];
-            Content = fieldValues;
+            Data = tupleData;
         }
 
         // Private helper methods
-        private static void CheckTupleSizeMatch(Tuple a, Tuple b)
-        {
-            if (a.Content.Length != b.Content.Length)
-                throw new System.ArgumentException("Tuples must be of same length.");
-        }
         private static bool NearlyEqual(double a, double b)
         {
             var Epsilon = 0.00001;
             return Math.Abs(a - b) < Epsilon;
         }
+        
+        private static void CheckTupleSizeMatch(double[] a, double[] b)
+        {
+            if (a.Length != b.Length)
+                throw new System.ArgumentException("Tuples must be of same length.");
+        }
 
-        public static bool TuplesAreEqual(Tuple a, Tuple b)
+        public static bool TuplesAreEqual(double[] a, double[] b)
         {
             CheckTupleSizeMatch(a, b);
             
-            for (var i = 0; i < a.Content.Length; i++)
+            for (var i = 0; i < a.Length; i++)
             {   
-                if (!NearlyEqual(a.Content[i], b.Content[i])) // if anything is not nearly equal, the tuples aren't equal
+                if (!NearlyEqual(a[i], b[i])) // if anything is not nearly equal, the tuples aren't equal
                     return false;
             }
             return true; // if everything is nearly equal, the tuples are equal
         }
         
-        private static Tuple OperateOnArray(Func<double, double, double> f, Tuple a, Tuple b)
+        private static double[] OperateOnArray(Func<double, double, double> f, double[] a, double[] b)
         {
             CheckTupleSizeMatch(a, b);
             
-            var tupleContent = new double[a.Content.Length];
-            for (var i = 0; i < a.Content.Length; i++)
-                tupleContent[i] = f(a.Content[i], b.Content[i]);
+            var tupleContent = new double[a.Length];
+            for (var i = 0; i < a.Length; i++)
+                tupleContent[i] = f(a[i], b[i]);
             
-            return new Tuple(tupleContent);
+            return tupleContent;
         }
 
-        private static Tuple OperateOnArray(Func<double, double> f, Tuple t)
+        private static double[] OperateOnArray(Func<double, double> f, double[] t)
         {
-            var tupleContent = new double[t.Content.Length];
-            for (var i = 0; i < t.Content.Length; i++)
-                tupleContent[i] = f(t.Content[i]);
+            var tupleContent = new double[t.Length];
+            for (var i = 0; i < t.Length; i++)
+                tupleContent[i] = f(t[i]);
 
-            return new Tuple(tupleContent);
+            return tupleContent;
         }
 
         // Public methods
-        public static double DotProduct(Tuple a, Tuple b)
+        public static double DotProduct(Tuple<T> a, Tuple<T> b)
         {
             // First check if same size tuples
-            CheckTupleSizeMatch(a, b);
+            CheckTupleSizeMatch(a.Data.Tuple, b.Data.Tuple);
             
             // Calculate dot product and return
             var result = 0.0;
-            for (var i = 0; i < a.Content.Length; i++)
-                result += a.Content[i] * b.Content[i];
+            for (var i = 0; i < a.Data.Tuple.Length; i++)
+                result += a.Data.Tuple[i] * b.Data.Tuple[i];
 
             return result;
         }
 
-        public static double Magnitude(Tuple t)
+        public static double Magnitude(Tuple<T> t)
         {
             // Calculate sum of each element to the power of 2
             var sumPow = 0.0;
-            for (var i = 0; i < t.Content.Length; i++)
-                sumPow += Math.Pow(t.Content[i], 2);
+            for (var i = 0; i < t.Data.Tuple.Length; i++)
+                sumPow += Math.Pow(t.Data.Tuple[i], 2);
             
             // Return the magnitude
             return Math.Sqrt(sumPow);
         }
 
-        public static Tuple Normalize(Tuple t)
+        public static Tuple<T> Normalize(Tuple<T> t)
         {
+            // Normalize tuple
+            var data = t.Data.Tuple;
             var magnitude = Magnitude(t);
+            var tupleContent = new double[data.Length];
+            for (var i = 0; i < data.Length; i++)
+                tupleContent[i] = data[i] / magnitude;
             
-            var tupleContent = new double[t.Content.Length];
-            for (var i = 0; i < t.Content.Length; i++)
-                tupleContent[i] = t.Content[i] / magnitude;
-            
-            return new Tuple(tupleContent);
+            // Put result in new tuple and return
+            var newTuple = new T();
+            newTuple.Tuple = tupleContent;
+            return new Tuple<T>(newTuple);
         }
-        
+
         // Overloading operators
-        public static bool operator ==(Tuple a, Tuple b)
+        public static bool operator ==(Tuple<T> a, Tuple<T> b)
         {
-            return TuplesAreEqual(a, b);
+            return TuplesAreEqual(a.Data.Tuple, b.Data.Tuple);
         }
 
-        public static bool operator !=(Tuple a, Tuple b)
+        public static bool operator !=(Tuple<T> a, Tuple<T> b)
         {
-            return !TuplesAreEqual(a, b);
+            return !TuplesAreEqual(a.Data.Tuple, b.Data.Tuple);
         }
 
-        public static Tuple operator +(Tuple a, Tuple b)
+        public static Tuple<T> operator +(Tuple<T> a, Tuple<T> b)
         {
+            // Create new TupleData
             Func<double, double, double> add = (double x, double y) => x + y;
-            return OperateOnArray(add, a, b);
+            var tupleData = new T();
+            tupleData.Tuple = OperateOnArray(add, a.Data.Tuple, b.Data.Tuple);
+
+            // Return new Tuple
+            return new Tuple<T>(tupleData);
         }
 
-        public static Tuple operator -(Tuple a, Tuple b)
+        public static Tuple<T> operator -(Tuple<T> a, Tuple<T> b)
         {
+            // Create new TupleData
             Func<double, double, double> subtract = (double x, double y) => x - y;
-            return OperateOnArray(subtract, a, b);
+            var tupleData = new T();
+            tupleData.Tuple = OperateOnArray(subtract, a.Data.Tuple, b.Data.Tuple);
+            
+            // Return new Tuple
+            return new Tuple<T>(tupleData);
         }
 
-        public static Tuple operator -(Tuple t)
+        public static Tuple<T> operator -(Tuple<T> t)
         {
+            // Create new TupleData
             Func<double, double> negate = (double x) => -x;
-            return OperateOnArray(negate, t);
+            var tupleData = new T();
+            tupleData.Tuple = OperateOnArray(negate, t.Data.Tuple);
+            
+            // Return new Tuple
+            return new Tuple<T>(tupleData);
         }
 
-        public static Tuple operator *(Tuple a, Tuple b)
+        public static Tuple<T> operator *(Tuple<T> a, Tuple<T> b)
         {
+            // Create new TupleData
             Func<double, double, double> multiply = (double x, double y) => x * y;
-            return OperateOnArray(multiply, a, b);
+            var tupleData = new T();
+            tupleData.Tuple = OperateOnArray(multiply, a.Data.Tuple, b.Data.Tuple);
+            
+            // Return new Tuple
+            return new Tuple<T>(tupleData);
         }
 
-        public static Tuple operator *(Tuple t, double d)
+        public static Tuple<T> operator *(Tuple<T> t, double d)
         {
+            // Create new TupleData
             Func<double, double> multiplyByScalar = (double x) => x * d;
-            return OperateOnArray(multiplyByScalar, t);
+            var tupleData = new T();
+            tupleData.Tuple = OperateOnArray(multiplyByScalar, t.Data.Tuple);
+            
+            // Return new Tuple
+            return new Tuple<T>(tupleData);
         }
 
-        public static Tuple operator /(Tuple a, Tuple b)
+        public static Tuple<T> operator /(Tuple<T> a, Tuple<T> b)
         {
+            // Create new TupleData
             Func<double, double, double> divide = (double x, double y) => x / y;
-            return OperateOnArray(divide, a, b);
+            var tupleData = new T();
+            tupleData.Tuple = OperateOnArray(divide, a.Data.Tuple, b.Data.Tuple);
+            
+            // Return new Tuple
+            return new Tuple<T>(tupleData);
         }
 
-        public static Tuple operator /(Tuple t, double d)
+        public static Tuple<T> operator /(Tuple<T> t, double d)
         {
+            // Create new TupleData
             Func<double, double> divideByScalar = (double x) => x / d;
-            return OperateOnArray(divideByScalar, t);
+            var tupleData = new T();
+            tupleData.Tuple = OperateOnArray(divideByScalar, t.Data.Tuple);
+            
+            // Return new Tuple
+            return new Tuple<T>(tupleData);
         }
 
         // Overriding basic methods
         public override string ToString()
         {
-            return String.Join(", ", Content);
+            return String.Join(", ", Data.Tuple);
         }
 
         public override bool Equals(object obj)
@@ -157,16 +195,16 @@ namespace RayCasterEngine
             if (obj is null)
                 return false;
             
-            var tuple = obj as Tuple;
-            return TuplesAreEqual(this, tuple);
+            var tuple = obj as Tuple<T>;
+            return TuplesAreEqual(Data.Tuple, tuple.Data.Tuple);
         }
 
         public override int GetHashCode()
         {
             var sum = 0.0;
-            for (var i = 0; i < Content.Length; i++)
+            for (var i = 0; i < Data.Tuple.Length; i++)
             {
-                sum += Content[i];
+                sum += Data.Tuple[i];
             }
             return (int)sum;
         }
