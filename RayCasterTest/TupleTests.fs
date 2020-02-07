@@ -24,7 +24,7 @@ let ``A tuple with w=0 is a vector`` () =
 let ``Point() creates tuples with w=1`` () =
     let x, y, z = (4.0, -4.0, 3.0)
     let point = Tuple3d.Point (x, y, z)
-    let expected = Tuple (Tuple3d(x, y, z, 1.0))
+    let expected = Tuple3d (x, y, z, 1.0)
 
     point = expected
     |> Assert.True
@@ -33,16 +33,16 @@ let ``Point() creates tuples with w=1`` () =
 let ``Vector() creates tuples with w=0`` () =
     let x, y, z = (4.0, -4.0, 3.0)
     let vector = Tuple3d.Vector (x, y, z)
-    let expected = Tuple (Tuple3d(x, y, z, 0.0))
+    let expected = Tuple3d(x, y, z, 0.0)
 
     vector = expected
     |> Assert.True
 
 [<Fact>]
 let ``Adding two tuples`` () =
-    let tuple1 = Tuple (Tuple3d (3.0, -2.0, 5.0, 1.0))
-    let tuple2 = Tuple (Tuple3d (-2.0, 3.0, 1.0, 0.0))
-    let expected = Tuple (Tuple3d (1.0, 1.0, 6.0, 1.0))
+    let tuple1 = Tuple3d (3.0, -2.0, 5.0, 1.0)
+    let tuple2 = Tuple3d (-2.0, 3.0, 1.0, 0.0)
+    let expected = Tuple3d (1.0, 1.0, 6.0, 1.0)
 
     tuple1 + tuple2 = expected
     |> Assert.True
@@ -73,31 +73,31 @@ let ``Subtracting two vectors`` () =
 
 [<Fact>]
 let ``Negating a tuple`` () =
-    let t = Tuple (Tuple3d (1.0, -2.0, 3.0, -4.0))
-    let expected = Tuple (Tuple3d (-1.0, 2.0, -3.0, 4.0))
+    let t = Tuple3d (1.0, -2.0, 3.0, -4.0)
+    let expected = Tuple3d (-1.0, 2.0, -3.0, 4.0)
 
     -t = expected
     |> Assert.True
 
 [<Fact>]
 let ``Multiplying a tuple by a scalar`` () =
-    let a = Tuple (Tuple3d (1.0, -2.0, 3.0, -4.0))
+    let a = Tuple3d (1.0, -2.0, 3.0, -4.0)
 
-    a * 3.5 = Tuple (Tuple3d (3.5, -7.0, 10.5, -14.0))
+    a * 3.5 = Tuple3d (3.5, -7.0, 10.5, -14.0)
     |> Assert.True
 
 [<Fact>]
 let ``Multiplying a tuple by a fraction`` () =
-    let a = Tuple (Tuple3d (1.0, -2.0, 3.0, -4.0))
+    let a = Tuple3d (1.0, -2.0, 3.0, -4.0)
     
-    a * 0.5 = Tuple (Tuple3d (0.5, -1.0, 1.5, -2.0))
+    a * 0.5 = Tuple3d (0.5, -1.0, 1.5, -2.0)
     |> Assert.True
 
 [<Fact>]
 let ``Dividing a tuple by a scalar`` () =
-    let a = Tuple (Tuple3d (1.0, -2.0, 3.0, -4.0))
+    let a = Tuple3d (1.0, -2.0, 3.0, -4.0)
 
-    a / 2.0 = Tuple (Tuple3d (0.5, -1.0, 1.5, -2.0))
+    a / 2.0 = Tuple3d (0.5, -1.0, 1.5, -2.0)
     |> Assert.True
 
 [<Fact>]
@@ -177,8 +177,8 @@ let ``The dot product of two tuples`` () =
 let ``The cross product of two vectors`` () =
     let a = Tuple3d.Vector (1.0, 2.0, 3.0)
     let b = Tuple3d.Vector (2.0, 3.0, 4.0)
-    let crossProductAB = Tuple3d.CrossProduct(a.Data, b.Data)
-    let crossProductBA = Tuple3d.CrossProduct(b.Data, a.Data)
+    let crossProductAB = Tuple3d.CrossProduct(a, b)
+    let crossProductBA = Tuple3d.CrossProduct(b, a)
 
     crossProductAB = Tuple3d.Vector (-1.0, 2.0, -1.0)
     |> (&&) (crossProductBA = Tuple3d.Vector (1.0, -2.0, 1.0))
