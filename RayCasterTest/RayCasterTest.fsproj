@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="CanvasTests.fs" />
     <Compile Include="ColorTests.fs" />
+    <Compile Include="PortalPixmapWriterTests.fs" />
     <Compile Include="TupleTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
