@@ -10,7 +10,8 @@
   <ItemGroup>
     <Compile Include="CanvasTests.fs" />
     <Compile Include="ColorTests.fs" />
-    <Compile Include="PortalPixmapWriterTests.fs" />
+    <Compile Include="MatrixTests.fs" />
+    <Compile Include="PortablePixmapWriterTests.fs" />
     <Compile Include="TupleTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

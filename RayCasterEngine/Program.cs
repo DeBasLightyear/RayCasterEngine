@@ -8,11 +8,11 @@ namespace RayCasterEngine
         static void Main(string[] args)
         {   
             // Canvas
-            var canvas = new Canvas(900, 550);
+            var canvas = new Canvas(640, 480);
             
             // Projectile
             var start = Tuple3d.Point(0, 1, 0);
-            var velocity = Tuple3d.Normalize(Tuple3d.Vector(1.0, 1.8, 0.0)) * 11.25;
+            var velocity = Tuple3d.Normalize(Tuple3d.Vector(1.0, 1.8, 0.0)) * 9.25;
             var projectile = new Projectile(start, velocity);
             
             // Environment
