@@ -27,28 +27,28 @@ let ``Contructing the PPM pixel data`` () =
 
     (ppmLines.[3] = "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0" &&
      ppmLines.[4] = "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0" &&
-     ppmLines.[5] = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255​")
+     ppmLines.[5] = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255")
      |> Assert.True
 
-// [<Fact>]
-// let ``Splitting long lines in PPM files`` () =
-//     let canvas = Canvas (10, 2)
-//     let color = Color (1.0, 0.8, 0.6)
-//     canvas.WriteAllPixels (color)
-//     let ppmLines = PortablePixmapWriter.CanvasToPPM(canvas).Split "\n"
+[<Fact>]
+let ``Splitting long lines in PPM files`` () =
+    let canvas = Canvas (10, 2)
+    let color = Color (1.0, 0.8, 0.6)
+    canvas.WriteAllPixels (color)
+    let ppmLines = PortablePixmapWriter.CanvasToPPM(canvas).Split "\n"
 
-//     (ppmLines.[3] = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204​" &&
-//      ppmLines.[4] = "153 255 204 153 255 204 153 255 204 153 255 204 153​" &&
-//      ppmLines.[5] = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204" &&
-//      ppmLines.[6] = "153 255 204 153 255 204 153 255 204 153 255 204 153")
-//      |> Assert.True
+    (ppmLines.[3] = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204" &&
+     ppmLines.[4] = "153 255 204 153 255 204 153 255 204 153 255 204 153" &&
+     ppmLines.[5] = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204" &&
+     ppmLines.[6] = "153 255 204 153 255 204 153 255 204 153 255 204 153")
+     |> Assert.True
 
-// [<Fact>]
-// let ``PPM files are terminated by a newline character`` () =
-//     let canvas = Canvas (5, 3)
-//     let ppm = PortablePixmapWriter.CanvasToPPM(canvas)
-//     let test = ppm.Length
+[<Fact>]
+let ``PPM files are terminated by a newline character`` () =
+    let canvas = Canvas (5, 3)
+    let ppm = PortablePixmapWriter.CanvasToPPM(canvas)
+    let lastChar = ppm.Replace("\n", "*") |> Seq.last
 
-//     ppm.[ppm.Length - 2..ppm.Length] = "\n"
-//     |> Assert.True
+    lastChar.ToString() = "*"
+    |> Assert.True
 

@@ -30,7 +30,14 @@ namespace RayCasterEngine
 
         public void WritePixel(int x, int y, Color color)
         {
-            PixelGrid[y, x] = color;
+            if (x > Width - 1 || x < 0 || y > Height - 1 || y < 0) // not on canvas
+            {
+                // Do nothing...
+            }
+            else // on canvas
+            {
+                PixelGrid[y, x] = color; // write pixel
+            }
         }
         public Color GetPixel(int x, int y)
         {

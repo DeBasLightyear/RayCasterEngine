@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace RayCasterEngine
 {
@@ -14,7 +15,20 @@ namespace RayCasterEngine
 
         public static string CanvasToPPM(Canvas canvas)
         {
-            
+            // First get header
+            var header = GetHeader(canvas);
+
+            // Then get pixelstring
+            var pixelstring = GetPixelString(canvas);
+
+            // Put them together with extra \n at the end
+            return header + pixelstring + "\n";
+        }
+
+        public static void WritePpmFile(string ppmString, string fileName, string destination)
+        {
+            var filePath = $"{destination}/{fileName}.ppm";
+            System.IO.File.WriteAllText(filePath, ppmString);
         }
 
         private static string GetHeader(Canvas canvas)
@@ -24,20 +38,14 @@ namespace RayCasterEngine
 
         private static string GetPixelString(Canvas canvas)
         {
-            // Scale to MaxColorValue
-            // Clamp to 0 where < 0 and 255 where > 255
-            // Convert each row to one string (join with \s)
+            // Convert the color for each pixel to PPM-format
+            var pixelsPPM = ConvertColors(canvas);
+
             // Truncate each row string on previous \s where row length > 70 (replace \s with \n)
+            var truncPixelsPPM = TruncatePixelStrings(pixelsPPM);
+            
             // Join all row strings to one large string with \n
-
-        }
-
-        private static string ConvertPixelGrid(Canvas canvas)
-        {
-            // Convert each row of Color objects into one PPM-formatted color string
-            var rowStrings = ConvertColors(canvas);
-
-            // Truncate rows to a maximum of 70 characters
+            return String.Join("\n", truncPixelsPPM);
         }
 
         private static string[] ConvertColors(Canvas canvas)
@@ -53,7 +61,7 @@ namespace RayCasterEngine
                     cRow +=  ConvertColor(canvas.PixelGrid[i, j]);
                 }
                 // Add row to array
-                colorStrings.Append(cRow);
+                colorStrings[i] = cRow.Substring(0, cRow.Length - 1); // remove the last space for each row
             }
             
             return colorStrings;
@@ -67,38 +75,58 @@ namespace RayCasterEngine
                                             if (el < 0)
                                                 return 0;
                                             if (el > MaxColorValue)
-                                                return MaxColorValue;
-                                            return (int)el;
+                                                return MaxColorValue;    
+                                            return Math.Ceiling(el);
                                         }).ToArray();
 
             // Convert to color string
             return $"{clampedColors[0]} {clampedColors[1]} {clampedColors[2]} ";
         }
 
-        // private static string GetPixelData(Canvas canvas)
-        // {
-        //     var result = "";
-        //     foreach(var color in canvas.PixelGrid)
-        //     {
-        //         result += ConvertColor(color);
-        //     }
+        private static string TruncatePixelStrings(string[] toTrunc)
+        {
+            // Where row is longer than 70 characters
+            // Find the last space before the 70th character
+            // Else add unaltered row to result
+            
+            var truncRows = new List<string>();
+            for(var i = 0; i < toTrunc.Length; i++)
+            {
+                var cRow = toTrunc[i];
+                truncRows.AddRange(SplitPixelString(cRow));
+            }
+            return String.Join("\n", truncRows);
+        }
 
-        //     return result;
-        // }
+        private static List<string> SplitPixelString(string pixelString)
+        {
+            // Lines in a PPM-file should be no longer than 70 chars. Split on last space before 70th char if longer
+            var truncStrings = new List<string>();
+            var cString = pixelString;
+            var amountSubstrings = Math.Ceiling((double)(pixelString.Length / 70));
 
-        // private static string ConvertColor(Color color)
-        // {
-        //     var scalar = 255;
-        //     var clampedColors = (color * scalar).Data.Select( el =>
-        //     {
-        //         if (el < 0)
-        //             return 0;
-        //         if (el > scalar)
-        //             return scalar;
-        //         return (int)el;
-        //     }).ToArray();
+            var i = 0;
+            do
+            {
+                // Determine how far we need to go on this iteration
+                var cLength = cString.Length;
+                var cEnd = cLength > 70 ? 70 : cLength;
 
-        //     return $"{clampedColors[0]} {clampedColors[1]} {clampedColors[2]}";
-        // }
+                // Take the first piece when the string is longer than 70 characters
+                var idx = cString.Substring(0, cEnd).LastIndexOf(" ");
+                truncStrings.Add(
+                    cLength > 70
+                    ? cString.Substring(0, idx)
+                    : cString
+                );
+
+                // Remove the part that was truncated. Don't remove anything if the string is shorter than 71 characters
+                cString = cString.Substring(idx + 1);
+                i++;
+            }
+            while (i <= amountSubstrings);
+
+            return truncStrings;
+        }
     }
 }
