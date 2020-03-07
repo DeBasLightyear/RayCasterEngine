@@ -201,12 +201,7 @@ namespace RayCasterEngine
 
         public override int GetHashCode()
         {
-            var sum = 0.0;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                sum += Data[i];
-            }
-            return (int)sum;
+            return Data.GetHashCode();
         }
     }
 }

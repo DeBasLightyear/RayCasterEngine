@@ -44,6 +44,11 @@ namespace RayCasterEngine
             return !AreEqual(a, b);
         }
 
+        public static Matrix operator *(Matrix a, Matrix b)
+        {
+            
+        }
+
         // Overriding basic methods
         public override bool Equals(object obj)
         {
@@ -52,6 +57,11 @@ namespace RayCasterEngine
             
             var matrix = obj as Matrix;
             return AreEqual(this, matrix);
+        }
+
+        public override int GetHashCode()
+        {
+            return Data.GetHashCode();
         }
     }
 }
