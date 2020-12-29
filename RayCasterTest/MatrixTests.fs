@@ -93,3 +93,47 @@ let ``Multiplying two matrices`` () =
     let matrix3 = RayCasterEngine.Matrix m3
 
     matrix1 * matrix2 = matrix3 |> Assert.True
+
+[<Fact>]
+let ``Multiplying a matrix and a tuple`` () =
+    let m = array2D [[1.0; 2.0; 3.0; 4.0]
+                     [2.0; 4.0; 4.0; 2.0]
+                     [8.0; 6.0; 4.0; 1.0]
+                     [0.0; 0.0; 0.0; 1.0]]
+    let matrix = RayCasterEngine.Matrix m
+    let tuple = RayCasterEngine.Tuple3d (1.0, 2.0, 3.0, 1.0)
+    let expected = RayCasterEngine.Tuple3d (18.0, 24.0, 33.0, 1.0)
+
+    matrix * tuple = expected |> Assert.True
+
+[<Fact>]
+let ``Multiplying a matrix by the identity matrix`` () =
+    let m1 = array2D [[0.0; 1.0;  2.0;  4.0]
+                      [1.0; 2.0;  4.0;  8.0]
+                      [2.0; 4.0;  8.0; 16.0]
+                      [4.0; 8.0; 16.0; 32.0]]
+    let m2 = array2D [[1.0; 0.0; 0.0; 0.0]
+                      [0.0; 1.0; 0.0; 0.0]
+                      [0.0; 0.0; 1.0; 0.0]
+                      [0.0; 0.0; 0.0; 1.0]]
+
+    let matrix = RayCasterEngine.Matrix m1
+    let idMatrix = RayCasterEngine.Matrix m2
+
+    matrix * idMatrix = matrix |> Assert.True
+
+[<Fact>]
+let ``Transposing a matrix`` () =
+    let m1 = array2D [[0.0; 9.0; 3.0; 0.0]
+                      [9.0; 8.0; 0.0; 8.0]
+                      [1.0; 8.0; 5.0; 3.0]
+                      [0.0; 0.0; 5.0; 8.0]]
+    let m2 = array2D [[0.0; 9.0; 1.0; 0.0]
+                      [9.0; 8.0; 8.0; 0.0]
+                      [3.0; 0.0; 5.0; 5.0]
+                      [0.0; 8.0; 3.0; 8.0]]
+    let matrix1 = RayCasterEngine.Matrix m1
+    let expected = RayCasterEngine.Matrix m2
+    let result = matrix1.Transpose()
+
+    result = expected |> Assert.True
