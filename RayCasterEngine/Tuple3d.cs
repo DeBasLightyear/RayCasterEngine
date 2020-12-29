@@ -17,9 +17,7 @@
                 throw new System.ArgumentException("A point or a vector must have an x, y, z and w value");
         }
 
-        public Tuple3d() : base(new double[4])
-        {
-        }
+        public Tuple3d() : base(new double[4]) { }
 
         public static Tuple3d Point(double x, double y, double z)
         {
